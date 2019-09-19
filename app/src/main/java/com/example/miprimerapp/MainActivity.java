@@ -6,16 +6,17 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 //import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     //EJEMPLO SUMA, PROMEDIO
-    private EditText et1, et2;
+    private EditText et_valor1, et_valor2;
     //private EditText et2;
     //private EditText et3;
-    private RadioButton rb1, rb2;
-    private TextView tv1;
+    private RadioButton rb_suma, rb_resta, rb_mul, rb_div;
+    private TextView tv_resultado;
 
 
     @Override
@@ -23,31 +24,45 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-                                                        //EJEMPLO PROMEDIO  // EJEMPLO SUMA MainActivity
-        et1 = (EditText)findViewById(R.id.txt__valor1);  //txt_matematicas); //txt_num1);
-        et2 = (EditText)findViewById(R.id.txt_valor2);  //txt_fisica);      //txt_num2);
-        //et3 = (EditText)findViewById(R.id.           //txt_quimica);
-        tv1 = (TextView)findViewById(R.id.textView);  //tv_estatus);      //txt_resultado);
-        rb1 = (RadioButton)findViewById(R.id.rb_sumar);
-        rb2 = (RadioButton)findViewById(R.id.rb_restar);
+                                                                    //EJEMPLO PROMEDIO  // EJEMPLO SUMA MainActivity
+        et_valor1 = (EditText)findViewById(R.id.txt__valor1);      //txt_matematicas); //txt_num1);
+        et_valor2 = (EditText)findViewById(R.id.txt_valor2);       //txt_fisica);      //txt_num2);
+        //et3 = (EditText)findViewById(R.id.                       //txt_quimica);
+        tv_resultado = (TextView)findViewById(R.id.tv_resultado);  //tv_estatus);      //txt_resultado);
+        rb_suma = (RadioButton)findViewById(R.id.rb_sumar);
+        rb_resta = (RadioButton)findViewById(R.id.rb_restar);
+        rb_mul = (RadioButton)findViewById(R.id.rb_producto);
+        rb_div = (RadioButton)findViewById(R.id.rb_division);
     }
 
     // ESTE MÉTODO REALIZA EL CALCULAR--------------------------------------------------------------
     public  void Calcular(View view){
-        String valor1_String = et1.getText().toString();
-        String valor2_String = et2.getText().toString();
+        String valor1_String = et_valor1.getText().toString();
+        String valor2_String = et_valor2.getText().toString();
 
         int valor1_Int = Integer.parseInt(valor1_String);
         int valor2_Int = Integer.parseInt(valor2_String);
 
-        if(rb1.isChecked() == true){
+        if(rb_suma.isChecked() == true){
             int suma = valor1_Int + valor2_Int;
             String resultado = String.valueOf(suma);
-            tv1.setText(resultado);
-        }else if(rb2.isChecked() == true){
+            tv_resultado.setText(resultado);
+        }else if(rb_resta.isChecked() == true){
             int resta = valor1_Int - valor2_Int;
             String resultado = String.valueOf(resta);
-            tv1.setText(resultado);
+            tv_resultado.setText(resultado);
+        }else if(rb_mul.isChecked() == true){
+            int multiplicacion = valor1_Int * valor2_Int;
+            String resultado = String.valueOf(multiplicacion);
+            tv_resultado.setText(resultado);
+        }else if(rb_div.isChecked() == true) {
+            if(valor2_Int != 0){
+                int division = valor1_Int / valor2_Int;
+                String resultado = String.valueOf(division);
+                tv_resultado.setText(resultado);
+            }else {
+                Toast.makeText(this,"El segundo valor debe ser diferente de cero",Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
