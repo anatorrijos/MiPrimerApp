@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">MiPrimerApp</string>
-    <string name="TextView">Selecciona un nombre</string>
-
+    <string name="txt_nombre">Nombre</string>
+    <string name="txt_password">Password</string>
+    <string name="button">Registrar</string>
     <!--
     <string name="check_suma">Sumar</string>
     <string name="check_resta">Restar</string>

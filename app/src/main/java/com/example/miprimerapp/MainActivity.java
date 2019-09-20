@@ -17,22 +17,48 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     //EJEMPLO SUMA, PROMEDIO, OPERACIONES BASICAS
-    //private EditText et1, et2;
+    private EditText etn, etp;
     //private Spinner spinner1;
     //private RadioButton rb_suma, rb_resta, rb_mul, rb_div;
     //private CheckBox check1, check2;
 
-    private TextView tv1;
+    /*private TextView tv1;
     private ListView lv1;
-
     private String nombres [] = {"Samuel","Valentina","Santiago","Alejandro","Valeria","Benjamin","Gerardo","Carlos","David","Sofía"};
-    private String edades [] = {"18","25","32","17","24","20","27","15","19","23"};
+    private String edades [] = {"18","25","32","17","24","20","27","15","19","23"};   */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tv1 = (TextView)findViewById(R.id.tv1);
+        etn = (EditText)findViewById(R.id.txt_nombre);
+        etp = (EditText)findViewById(R.id.txt_password);
+    }
+
+    public void Registrar(View view){
+        String nombre = etn.getText().toString();
+        String password = etp.getText().toString();
+
+        if(nombre.length() == 0){
+            Toast.makeText(this,"Dedes de ingresar un nombre", Toast.LENGTH_SHORT).show();
+        }if(password.length() == 0){
+            Toast.makeText(this,"Dedes de ingresar una contraseña", Toast.LENGTH_SHORT).show();
+        }if(nombre.length() != 0 && password.length() != 0) {
+            Toast.makeText(this,"Registro en proceso...", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //METODO PARA EL IMAGEBUTTON G------------------------------------------------------------------
+    public void MensajeG(View view){
+        Toast.makeText(this,"Imagen Geekipedia", Toast.LENGTH_SHORT).show();
+    }
+    //METODO PARA EL IMAGEBUTTON MANO------------------------------------------------------------------
+    public void MensajeMano(View view){
+        Toast.makeText(this,"Imagen de una mano", Toast.LENGTH_SHORT).show();
+    }
+    //----------------------------------------------------------------------------------- onCreate()
+        /*tv1 = (TextView)findViewById(R.id.tv1);
         lv1 = (ListView)findViewById(R.id.lv1);
 
         ArrayAdapter <String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, nombres);
@@ -43,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 tv1.setText("La edad de " + lv1.getItemAtPosition(i) + " es " + edades[i] + " años");
             }
-        });
+        }); */
 
         /*spinner1 = (Spinner) findViewById(R.id.spinner);
         String [] opciones = {"sumar","restar","multiplicar","dividir"};
@@ -52,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         //check2 = (CheckBox) findViewById(R.id.check_Resta);
         //rb_mul = (RadioButton)findViewById(R.id.rb_producto);
-    }
+
 
     // ESTE MÉTODO REALIZA EL CALCULAR CON SPINNER------------------------------------------------
     /*public  void Calcular(View view){
@@ -156,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
             tv1.setText("Estatus Reprobado con " + promedio);
         }
     }*/
+
     // ESTE MÉTODO REALIZA LA SUMA------------------------------------------------------------------
     /*public void Sumar(View view){
         String valor1 = et1.getText().toString();
