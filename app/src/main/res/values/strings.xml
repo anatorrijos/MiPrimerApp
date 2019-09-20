@@ -1,17 +1,20 @@
 <resources>
     <string name="app_name">MiPrimerApp</string>
+    <string name="TextView">Selecciona un nombre</string>
+
+    <!--
+    <string name="check_suma">Sumar</string>
+    <string name="check_resta">Restar</string>
     <string name="txt_PrimerValor">Ingresa el primer valor</string>
     <string name="txt_SegundoValor">Ingresa el segundo valor</string>
     <string name="rb1">Sumar</string>
     <string name="rb2">Restar</string>
     <string name="rb3">Multiplicar</string>
-    <string name="rb4">División</string>
-    <string name="Button">CALCULAR</string>
-    <string name="TextView_Resultado">Resultado</string>
+    <string name="rb4">División</string> -->
+
     <!--- ADVERTENCIA HARDCODED TEST
     <string name="txt_view_String">Estatus del Maestro</string>
     <string name="txt_matematicas_String">Matemáticas</string>
     <string name="txt_fisica_String">Física</string>
-    <string name="txt_quimica_String">Química</string>
-    <string name="button">Evaluar</string>  -->
+    <string name="txt_quimica_String">Química</string> -->
 </resources>

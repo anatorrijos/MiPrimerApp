@@ -3,40 +3,112 @@ package com.example.miprimerapp;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-//import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    //EJEMPLO SUMA, PROMEDIO
-    private EditText et_valor1, et_valor2;
-    //private EditText et2;
-    //private EditText et3;
-    private RadioButton rb_suma, rb_resta, rb_mul, rb_div;
-    private TextView tv_resultado;
+    //EJEMPLO SUMA, PROMEDIO, OPERACIONES BASICAS
+    //private EditText et1, et2;
+    //private Spinner spinner1;
+    //private RadioButton rb_suma, rb_resta, rb_mul, rb_div;
+    //private CheckBox check1, check2;
 
+    private TextView tv1;
+    private ListView lv1;
 
+    private String nombres [] = {"Samuel","Valentina","Santiago","Alejandro","Valeria","Benjamin","Gerardo","Carlos","David","Sofía"};
+    private String edades [] = {"18","25","32","17","24","20","27","15","19","23"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-                                                                    //EJEMPLO PROMEDIO  // EJEMPLO SUMA MainActivity
-        et_valor1 = (EditText)findViewById(R.id.txt__valor1);      //txt_matematicas); //txt_num1);
-        et_valor2 = (EditText)findViewById(R.id.txt_valor2);       //txt_fisica);      //txt_num2);
-        //et3 = (EditText)findViewById(R.id.                       //txt_quimica);
-        tv_resultado = (TextView)findViewById(R.id.tv_resultado);  //tv_estatus);      //txt_resultado);
-        rb_suma = (RadioButton)findViewById(R.id.rb_sumar);
-        rb_resta = (RadioButton)findViewById(R.id.rb_restar);
-        rb_mul = (RadioButton)findViewById(R.id.rb_producto);
-        rb_div = (RadioButton)findViewById(R.id.rb_division);
+        tv1 = (TextView)findViewById(R.id.tv1);
+        lv1 = (ListView)findViewById(R.id.lv1);
+
+        ArrayAdapter <String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, nombres);
+        lv1.setAdapter(adapter);
+
+        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                tv1.setText("La edad de " + lv1.getItemAtPosition(i) + " es " + edades[i] + " años");
+            }
+        });
+
+        /*spinner1 = (Spinner) findViewById(R.id.spinner);
+        String [] opciones = {"sumar","restar","multiplicar","dividir"};
+        ArrayAdapter <String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, opciones);
+        spinner1.setAdapter(adapter);*/
+
+        //check2 = (CheckBox) findViewById(R.id.check_Resta);
+        //rb_mul = (RadioButton)findViewById(R.id.rb_producto);
     }
 
-    // ESTE MÉTODO REALIZA EL CALCULAR--------------------------------------------------------------
-    public  void Calcular(View view){
+    // ESTE MÉTODO REALIZA EL CALCULAR CON SPINNER------------------------------------------------
+    /*public  void Calcular(View view){
+        String valor1_String = et1.getText().toString();
+        String valor2_String = et2.getText().toString();
+
+        int valor1_Int = Integer.parseInt(valor1_String);
+        int valor2_Int = Integer.parseInt(valor2_String);
+
+        String seleccion = spinner1.getSelectedItem().toString();
+
+        if(seleccion.equals("sumar")){
+            int suma = valor1_Int + valor2_Int;
+            String resultado = String.valueOf(suma);
+            tv1.setText(resultado);
+        }else if(seleccion.equals("restar")){
+            int resta = valor1_Int - valor2_Int;
+            String resultado = String.valueOf(resta);
+            tv1.setText(resultado);
+        }else if(seleccion.equals("multiplicar")){
+            int multiplicacion = valor1_Int * valor2_Int;
+            String resultado = String.valueOf(multiplicacion);
+            tv1.setText(resultado);
+        }else if(seleccion.equals("dividir")) {
+            if (valor2_Int != 0) {
+                int division = valor1_Int / valor2_Int;
+                String resultado = String.valueOf(division);
+                tv1.setText(resultado);
+            } else {
+                Toast.makeText(this, "El segundo valor debe ser diferente de cero", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }*/
+
+    // ESTE MÉTODO REALIZA EL CALCULAR CON CHECKBOXS------------------------------------------------
+    /*public  void Calcular(View view){
+        String valor1_String = et1.getText().toString();
+        String valor2_String = et2.getText().toString();
+
+        int valor1_Int = Integer.parseInt(valor1_String);
+        int valor2_Int = Integer.parseInt(valor2_String);
+
+        String resultado = " ";
+
+        if(check1.isChecked() == true){
+            int suma = valor1_Int + valor2_Int;
+            resultado = "La suma es: " + suma + " / ";
+        }if(check2.isChecked() == true) {
+            int resta = valor1_Int - valor2_Int;
+            resultado += "La resta es: " + resta;
+        }
+        tv1.setText(resultado);
+    }*/
+
+    // ESTE MÉTODO REALIZA EL CALCULAR CON RADIOBUTTONS---------------------------------------------
+    /*public  void Calcular(View view){
         String valor1_String = et_valor1.getText().toString();
         String valor2_String = et_valor2.getText().toString();
 
@@ -64,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"El segundo valor debe ser diferente de cero",Toast.LENGTH_SHORT).show();
             }
         }
-    }
+    }*/
 
     // ESTE MÉTODO REALIZA EL PROMEDIO--------------------------------------------------------------
     /*public void estatus(View view){
