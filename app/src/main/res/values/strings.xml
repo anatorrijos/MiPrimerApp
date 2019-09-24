@@ -1,8 +1,16 @@
 <resources>
     <string name="app_name">MiPrimerApp</string>
-    <string name="txt_nombre">Nombre</string>
+    <string name="txt_nombre">Nombre del contacto</string>
+    <string name="txt_datos">Datos del contacto</string>
+    <string name="botonGuardar">Guardar</string>
+    <string name="botonBuscar">Buscar</string>
+
+    <!-- ACTIVITY 2 -->
+    <string name="BotonCerrar">Cerrar</string>
+
+    <!-- <string name="txt_nombre">Nombre</string>
     <string name="txt_password">Password</string>
-    <string name="button">Registrar</string>
+    <string name="button">Registrar</string> -->
     <!--
     <string name="check_suma">Sumar</string>
     <string name="check_resta">Restar</string>
@@ -13,7 +21,7 @@
     <string name="rb3">Multiplicar</string>
     <string name="rb4">División</string> -->
 
-    <!--- ADVERTENCIA HARDCODED TEST
+    <!-- ADVERTENCIA HARDCODED TEST
     <string name="txt_view_String">Estatus del Maestro</string>
     <string name="txt_matematicas_String">Matemáticas</string>
     <string name="txt_fisica_String">Física</string>

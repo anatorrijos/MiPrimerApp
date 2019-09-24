@@ -1,23 +1,17 @@
 package com.example.miprimerapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    //EJEMPLO SUMA, PROMEDIO, OPERACIONES BASICAS
-    private EditText etn, etp;
+    //EJEMPLO SUMA, PROMEDIO, OPERACIONES BASICAS, REGISTRO
+    private EditText et_nombre, et_datos;
     //private Spinner spinner1;
     //private RadioButton rb_suma, rb_resta, rb_mul, rb_div;
     //private CheckBox check1, check2;
@@ -32,11 +26,65 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        etn = (EditText)findViewById(R.id.txt_nombre);
-        etp = (EditText)findViewById(R.id.txt_password);
+        et_nombre = (EditText)findViewById(R.id.txt_nombre);
+        et_datos = (EditText)findViewById(R.id.txt_bitacora);
+
+        /*et1 = (EditText)findViewById(R.id.txt_mail);
+        SharedPreferences preferences = getSharedPreferences("datos", Context.MODE_PRIVATE);
+        et1.setText(preferences.getString("mail",""));*/
     }
 
-    public void Registrar(View view){
+    //METODO BOTON GUARDAR AGENDA------------------------------------------------------------------------
+    /*public void Guardar(View view){
+        String nombre = et_nombre.getText().toString();
+        String datos = et_datos.getText().toString();
+
+        SharedPreferences preferencias = getSharedPreferences("agenda",Context.MODE_PRIVATE);
+        SharedPreferences.Editor obj_editor = preferencias.edit();
+        obj_editor.putString(nombre, datos);
+        obj_editor.commit();
+
+        Toast.makeText(this,"El contacto ha sido guardado",Toast.LENGTH_SHORT).show();
+    }*/
+
+    //METODO BOTON BUSCAR AGENDA------------------------------------------------------------------------
+    /*public void Buscar(View view){
+        String nombre = et_nombre.getText().toString();
+
+        SharedPreferences preferencias = getSharedPreferences("agenda",Context.MODE_PRIVATE);
+        String datos = preferencias.getString(nombre, "");
+
+        if(datos.length() == 0){
+            Toast.makeText(this,"No se encontró ningun registro",Toast.LENGTH_SHORT).show();
+        }else {
+            et_datos.setText(datos);
+        }
+    }*/
+
+    //METODO BOTON GUARDAR E-MAIL------------------------------------------------------------------------
+    /*public void Guardar(View view){
+        SharedPreferences preferencias = getSharedPreferences("datos",Context.MODE_PRIVATE);
+        SharedPreferences.Editor obj_editor = preferencias.edit();
+        obj_editor.putString("mail", et1.getText().toString());
+        obj_editor.commit();
+        finish();
+    }*/
+
+    //METODO BOTON ENVIAR, IR------------------------------------------------------------------------
+    /*public void Navegar(View view){
+        Intent i = new Intent(this, SegundoActivity.class);
+        i.putExtra("sitioWeb", et1.getText().toString());
+        startActivity(i);
+    }*/
+
+    //METODO BOTON SIGUIENTE------------------------------------------------------------------------
+    public void Siguiente(View view){
+        Intent siguiente = new Intent(this, SegundoActivity.class);
+        startActivity(siguiente);
+    }
+
+    //METODO REGISTRAR------------------------------------------------------------------------------
+    /*public void Registrar(View view){
         String nombre = etn.getText().toString();
         String password = etp.getText().toString();
 
@@ -47,13 +95,13 @@ public class MainActivity extends AppCompatActivity {
         }if(nombre.length() != 0 && password.length() != 0) {
             Toast.makeText(this,"Registro en proceso...", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
     //METODO PARA EL IMAGEBUTTON G------------------------------------------------------------------
     public void MensajeG(View view){
         Toast.makeText(this,"Imagen Geekipedia", Toast.LENGTH_SHORT).show();
     }
-    //METODO PARA EL IMAGEBUTTON MANO------------------------------------------------------------------
+    //METODO PARA EL IMAGEBUTTON MANO---------------------------------------------------------------
     public void MensajeMano(View view){
         Toast.makeText(this,"Imagen de una mano", Toast.LENGTH_SHORT).show();
     }
