@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">MiPrimerApp</string>
-    <string name="txt_nombre">Nombre del contacto</string>
-    <string name="txt_datos">Datos del contacto</string>
+    <string name="txt_nombre">Nombre del archivo</string>
     <string name="botonGuardar">Guardar</string>
-    <string name="botonBuscar">Buscar</string>
+    <string name="botonConsultar">Consultar</string>
 
     <!-- ACTIVITY 2 -->
     <string name="BotonCerrar">Cerrar</string>

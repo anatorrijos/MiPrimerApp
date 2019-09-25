@@ -2,16 +2,25 @@ package com.example.miprimerapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 public class MainActivity extends AppCompatActivity {
 
     //EJEMPLO SUMA, PROMEDIO, OPERACIONES BASICAS, REGISTRO
-    private EditText et_nombre, et_datos;
+    private EditText et_nombre, et_contenido;
     //private Spinner spinner1;
     //private RadioButton rb_suma, rb_resta, rb_mul, rb_div;
     //private CheckBox check1, check2;
@@ -27,12 +36,70 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         et_nombre = (EditText)findViewById(R.id.txt_nombre);
-        et_datos = (EditText)findViewById(R.id.txt_bitacora);
+        et_contenido = (EditText)findViewById(R.id.txt_contenido);
+    }
+    public void Guardar(View view){
+        String nombre = et_nombre.getText().toString();
+        String contenido = et_contenido.getText().toString();
 
+        try{
+            File tarjetaSD = Environment.getExternalStorageDirectory();
+            Toast.makeText(this, tarjetaSD.getPath(),Toast.LENGTH_SHORT).show();
+            File rutaArchivo = new File(tarjetaSD.getPath(), nombre);
+        }catch (IOException e){
+            Toast.makeText(this, "No se pudo guardar",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //BITACORA (FICHEROS ALMACENAMIENTO INTERNO)
+        /*et1 = (EditText) findViewById(R.id.txt_bitacora);
+        String archivos[] = fileList();
+
+        if(ArchivoExiste(archivos, "bitacora.txt")){
+            try{
+                InputStreamReader archivo = new InputStreamReader(openFileInput("bitacora.txt"));
+                BufferedReader br = new BufferedReader(archivo);
+                String linea = br.readLine();
+                String bitacoraCompleta = "";
+
+                while (linea != null){
+                    bitacoraCompleta += linea + "\n";
+                    linea = br.readLine();
+                }
+                br.close();
+                archivo.close();
+                et1.setText(bitacoraCompleta);
+            }catch (Exception e){
+
+            }
+        }*/
+
+    //METODO ARCHIVO EXISTE BITACORA------------------------------------------
+    /*private boolean ArchivoExiste(String archivos[], String nombreArchivo){
+        for (int i = 0; i < archivos.length; i++)
+            if(nombreArchivo.equals(archivos[i]))
+                return true;
+        return false;
+    }*/
+
+    //METODO GUARDAR BITACORA---------------------------------------------------
+    /*public void Guardar(View view) {
+        try {
+            OutputStreamWriter archivo = new OutputStreamWriter(openFileOutput("bitacora.txt", Activity.MODE_PRIVATE));
+            archivo.write(et1.getText().toString());
+            archivo.flush();
+            archivo.close();
+        }catch (Exception e){
+
+        }
+        Toast.makeText(this, "Bitacora guardada correctamente", Toast.LENGTH_SHORT).show();
+        finish();
+    }*/
+
+    //AGENDA (SHAREPREFERENCES)
         /*et1 = (EditText)findViewById(R.id.txt_mail);
         SharedPreferences preferences = getSharedPreferences("datos", Context.MODE_PRIVATE);
         et1.setText(preferences.getString("mail",""));*/
-    }
 
     //METODO BOTON GUARDAR AGENDA------------------------------------------------------------------------
     /*public void Guardar(View view){
