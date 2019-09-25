@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -20,7 +23,7 @@ import java.io.OutputStreamWriter;
 public class MainActivity extends AppCompatActivity {
 
     //EJEMPLO SUMA, PROMEDIO, OPERACIONES BASICAS, REGISTRO
-    private EditText et_nombre, et_contenido;
+    private EditText et_codigo, et_descripcion, et_precio;
     //private Spinner spinner1;
     //private RadioButton rb_suma, rb_resta, rb_mul, rb_div;
     //private CheckBox check1, check2;
@@ -35,30 +38,134 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        et_nombre = (EditText)findViewById(R.id.txt_nombre);
-        et_contenido = (EditText)findViewById(R.id.txt_contenido);
+        et_codigo = (EditText)findViewById(R.id.txt_codigo);
+        et_descripcion = (EditText)findViewById(R.id.txt_descripcion);
+        et_precio = (EditText)findViewById(R.id.txt_precio);
     }
-    public void Guardar(View view){
+    //METODO REGISTRAR PRODUCTOS SQLITE--------------------------------------------------------------
+    public void  Registrar (View view){
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,"administracion", null, 1);
+        SQLiteDatabase BaseDeDatos = admin.getWritableDatabase();
+
+        String codigo = et_codigo.getText().toString();
+        String descripcion = et_descripcion.getText().toString();
+        String precio = et_precio.getText().toString();
+
+        if(!codigo.isEmpty() && !descripcion.isEmpty() && !precio.isEmpty()){
+            ContentValues registro = new ContentValues();
+
+            registro.put("codigo", codigo);
+            registro.put("descripcion", descripcion);
+            registro.put("precio", precio);
+
+            BaseDeDatos.insert("articulos",null, registro);
+            BaseDeDatos.close();
+            et_codigo.setText("");
+            et_descripcion.setText("");
+            et_precio.setText("");
+
+            Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, "Debes llenar todos los campos", Toast.LENGTH_SHORT).show();;
+        }
+    }
+    //METODO CONSULTAR PRODUCTOS SQLITE--------------------------------------------------------------
+    public  void  Buscar(View view){
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "administracion",null,1);
+        SQLiteDatabase BaseDeDatos = admin.getWritableDatabase();
+
+        String codigo = et_codigo.getText().toString();
+
+        if(!codigo.isEmpty()){
+            Cursor fila = BaseDeDatos.rawQuery("select descripcion, precio from articulos where codigo = " + codigo, null);
+            if(fila.moveToFirst()){
+                et_descripcion.setText(fila.getString(0));
+                et_precio.setText(fila.getString(1));
+                BaseDeDatos.close();
+            }else {
+                Toast.makeText(this, "No existe el artículo", Toast.LENGTH_SHORT).show();
+                BaseDeDatos.close();
+            }
+        }else {
+            Toast.makeText(this, "Debes introducir el código del artículo", Toast.LENGTH_SHORT).show();
+        }
+    }
+    //METODO ELIMINAR PRODUCTOS SQLITE--------------------------------------------------------------
+    public void Eliminar(View view){
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "administracion",null,1);
+        SQLiteDatabase BaseDeDatos = admin.getWritableDatabase();
+
+        String codigo = et_codigo.getText().toString();
+
+        if(!codigo.isEmpty()){
+            int cantidad = BaseDeDatos.delete("articulos","codigo = " + codigo, null);
+            BaseDeDatos.close();
+
+            et_codigo.setText("");
+            et_precio.setText("");
+            et_descripcion.setText("");
+
+            if(cantidad == 1){
+                Toast.makeText(this,"Artículo eliminado exitosamente",Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(this,"El artículo no existe",Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            Toast.makeText(this,"Debes de introducir el código del artículo",Toast.LENGTH_SHORT).show();
+        }
+    }
+    //METODO MODIFICAR PRODUCTOS SQLITE--------------------------------------------------------------
+    public void  Modificar(View view){
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,"administracion",null,1);
+        SQLiteDatabase BaseDeDatos = admin.getWritableDatabase();
+
+        String codigo = et_codigo.getText().toString();
+        String descripcion = et_descripcion.getText().toString();
+        String precio = et_precio.getText().toString();
+
+        if(!codigo.isEmpty() && !descripcion.isEmpty() && !precio.isEmpty()){
+            ContentValues registro = new ContentValues();
+            registro.put("codigo", codigo);
+            registro.put("descripcion", descripcion);
+            registro.put("precio", precio);
+
+            int cantidad = BaseDeDatos.update("articulos", registro,"codigo = " + codigo,null);
+            BaseDeDatos.close();
+
+            if(cantidad == 1){
+                Toast.makeText(this,"Artículo modificado correctamente",Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(this,"El artículo no existe",Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            Toast.makeText(this,"Debes llenar todos los campos", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //METODO GUARDAR ARCHIVOS EXTERNOS--------------------------------------------------------------
+    /*public void Guardar(View view) {
         String nombre = et_nombre.getText().toString();
         String contenido = et_contenido.getText().toString();
 
-        try{
+        try {
             File tarjetaSD = Environment.getExternalStorageDirectory();
-            Toast.makeText(this, tarjetaSD.getPath(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, tarjetaSD.getPath(), Toast.LENGTH_SHORT).show();
             File rutaArchivo = new File(tarjetaSD.getPath(), nombre);
-            OutputStreamWriter crearArchivo = new OutputStreamWriter(openFileOutput(nombre,Activity.MODE_PRIVATE));
+            OutputStreamWriter crearArchivo = new OutputStreamWriter(openFileOutput(nombre, Activity.MODE_PRIVATE));
 
             crearArchivo.write(contenido);
             crearArchivo.flush();
             crearArchivo.close();
 
-            Toast.makeText(this,"Guardado correctamente",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Guardado correctamente", Toast.LENGTH_SHORT).show();
             et_nombre.setText("");
             et_contenido.setText("");
-        }catch (IOException e){
-            Toast.makeText(this, "No se pudo guardar",Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            Toast.makeText(this, "No se pudo guardar", Toast.LENGTH_SHORT).show();
         }
-    }public  void  Consultar(View view){
+    }*/
+    //METODO CONSULTAR ARCHIVOS EXTERNOS------------------------------------------------------------
+    /*public  void  Consultar(View view){
         String nombre = et_nombre.getText().toString();
 
         try{
@@ -81,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
         }catch (IOException e){
             Toast.makeText(this,"Error al leer el archivo",Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
     //BITACORA (FICHEROS ALMACENAMIENTO INTERNO)
         /*et1 = (EditText) findViewById(R.id.txt_bitacora);
@@ -105,16 +212,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }*/
-
-    //METODO ARCHIVO EXISTE BITACORA------------------------------------------
+    //METODO ARCHIVO EXISTE BITACORA----------------------------------------------------------------
     /*private boolean ArchivoExiste(String archivos[], String nombreArchivo){
         for (int i = 0; i < archivos.length; i++)
             if(nombreArchivo.equals(archivos[i]))
                 return true;
         return false;
     }*/
-
-    //METODO GUARDAR BITACORA---------------------------------------------------
+    //METODO GUARDAR BITACORA-----------------------------------------------------------------------
     /*public void Guardar(View view) {
         try {
             OutputStreamWriter archivo = new OutputStreamWriter(openFileOutput("bitacora.txt", Activity.MODE_PRIVATE));
@@ -132,8 +237,7 @@ public class MainActivity extends AppCompatActivity {
         /*et1 = (EditText)findViewById(R.id.txt_mail);
         SharedPreferences preferences = getSharedPreferences("datos", Context.MODE_PRIVATE);
         et1.setText(preferences.getString("mail",""));*/
-
-    //METODO BOTON GUARDAR AGENDA------------------------------------------------------------------------
+    //METODO BOTON GUARDAR AGENDA-------------------------------------------------------------------
     /*public void Guardar(View view){
         String nombre = et_nombre.getText().toString();
         String datos = et_datos.getText().toString();
@@ -145,8 +249,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(this,"El contacto ha sido guardado",Toast.LENGTH_SHORT).show();
     }*/
-
-    //METODO BOTON BUSCAR AGENDA------------------------------------------------------------------------
+    //METODO BOTON BUSCAR AGENDA--------------------------------------------------------------------
     /*public void Buscar(View view){
         String nombre = et_nombre.getText().toString();
 
@@ -160,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }*/
 
-    //METODO BOTON GUARDAR E-MAIL------------------------------------------------------------------------
+    //METODO BOTON GUARDAR E-MAIL-------------------------------------------------------------------
     /*public void Guardar(View view){
         SharedPreferences preferencias = getSharedPreferences("datos",Context.MODE_PRIVATE);
         SharedPreferences.Editor obj_editor = preferencias.edit();
@@ -168,8 +271,7 @@ public class MainActivity extends AppCompatActivity {
         obj_editor.commit();
         finish();
     }*/
-
-    //METODO BOTON ENVIAR, IR------------------------------------------------------------------------
+    //METODO BOTON ENVIAR, IR-----------------------------------------------------------------------
     /*public void Navegar(View view){
         Intent i = new Intent(this, SegundoActivity.class);
         i.putExtra("sitioWeb", et1.getText().toString());

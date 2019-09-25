@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">MiPrimerApp</string>
-    <string name="txt_nombre">Nombre del archivo</string>
-    <string name="botonGuardar">Guardar</string>
-    <string name="botonConsultar">Consultar</string>
+    <string name="txt_codigo">Código del producto</string>
+    <string name="txt_descripcion">Descripción del producto</string>
+    <string name="txt_precio">Precio del producto</string>
+    <string name="botonRegistrar">Registrar producto</string>
+    <string name="botonBuscar">Buscar producto</string>
+    <string name="botonEliminar">Eliminar producto</string>
+    <string name="botonModificar">Modificar Producto</string>
 
     <!-- ACTIVITY 2 -->
     <string name="BotonCerrar">Cerrar</string>
