@@ -46,8 +46,40 @@ public class MainActivity extends AppCompatActivity {
             File tarjetaSD = Environment.getExternalStorageDirectory();
             Toast.makeText(this, tarjetaSD.getPath(),Toast.LENGTH_SHORT).show();
             File rutaArchivo = new File(tarjetaSD.getPath(), nombre);
+            OutputStreamWriter crearArchivo = new OutputStreamWriter(openFileOutput(nombre,Activity.MODE_PRIVATE));
+
+            crearArchivo.write(contenido);
+            crearArchivo.flush();
+            crearArchivo.close();
+
+            Toast.makeText(this,"Guardado correctamente",Toast.LENGTH_SHORT).show();
+            et_nombre.setText("");
+            et_contenido.setText("");
         }catch (IOException e){
             Toast.makeText(this, "No se pudo guardar",Toast.LENGTH_SHORT).show();
+        }
+    }public  void  Consultar(View view){
+        String nombre = et_nombre.getText().toString();
+
+        try{
+            File tarjetaSD = Environment.getExternalStorageDirectory();
+            File rutaArchivo = new File(tarjetaSD.getPath(),nombre);
+            InputStreamReader abrirArchivo = new InputStreamReader(openFileInput(nombre));
+
+            BufferedReader leerArchivo = new BufferedReader(abrirArchivo);
+            String linea = leerArchivo.readLine();
+            String contenidoCompleto = "";
+
+            while (linea != null){
+                contenidoCompleto += linea + "\n";
+                linea = leerArchivo.readLine();
+            }
+
+            leerArchivo.close();
+            abrirArchivo.close();
+            et_contenido.setText(contenidoCompleto);
+        }catch (IOException e){
+            Toast.makeText(this,"Error al leer el archivo",Toast.LENGTH_SHORT).show();
         }
     }
 
