@@ -1,17 +1,36 @@
 package com.example.miprimerapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
+import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -20,30 +39,378 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-public class MainActivity extends AppCompatActivity {
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+public class MainActivity extends AppCompatActivity {
+    /*Button play;
+    SoundPool sp;
+    int sonido_de_Reproduccion;*/
     //EJEMPLO SUMA, PROMEDIO, OPERACIONES BASICAS, REGISTRO
-    private EditText et_codigo, et_descripcion, et_precio;
+    //private EditText et_codigo, et_descripcion, et_precio;
     //private Spinner spinner1;
     //private RadioButton rb_suma, rb_resta, rb_mul, rb_div;
     //private CheckBox check1, check2;
-
+    //private ImageView iv1;
+    //private Button boton1;
     /*private TextView tv1;
     private ListView lv1;
     private String nombres [] = {"Samuel","Valentina","Santiago","Alejandro","Valeria","Benjamin","Gerardo","Carlos","David","Sofía"};
     private String edades [] = {"18","25","32","17","24","20","27","15","19","23"};   */
+    /*Button play_pausa, btn_repetir;
+    MediaPlayer mp;
+    ImageView iv;
+    int repetir = 2, posicion = 0;
+    MediaPlayer vectormp [] = new MediaPlayer[3];*/
+    /*private MediaRecorder grabacion;
+    private String archivoSalida = null;
+    private Button btn_recorder;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        et_codigo = (EditText)findViewById(R.id.txt_codigo);
-        et_descripcion = (EditText)findViewById(R.id.txt_descripcion);
-        et_precio = (EditText)findViewById(R.id.txt_precio);
+        //CAMARA Y VIDEO
+        /*img = (ImageView)findViewById(R.id.imageView);
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1000);
+        }*/
+        //GRABADORA
+        /*btn_recorder = (Button) findViewById(R.id.btn_rec);
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO}, 1000);
+        }*/
+        //SOUNDPOOL
+        /*play = (Button) findViewById(R.id.button_play);
+        sp = new SoundPool(1, AudioManager.STREAM_MUSIC, 1);
+        sonido_de_Reproduccion = sp.load(this, R.raw.sound_short, 1);     */
+        //PONER ICONO EN EL ACTION BAR
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+        //REPRODUCTOR
+        /*play_pausa = (Button)findViewById(R.id.btn_play);
+        btn_repetir = (Button)findViewById(R.id.btn_repetir);
+        iv = (ImageView)findViewById(R.id.imageView);
+        vectormp[0] = MediaPlayer.create(this, R.raw.race);
+        vectormp[1] = MediaPlayer.create(this, R.raw.sound);
+        vectormp[2] = MediaPlayer.create(this, R.raw.tea);*/
     }
-    //METODO REGISTRAR PRODUCTOS SQLITE--------------------------------------------------------------
-    public void  Registrar (View view){
+    //METODO GRABAR VIDEO---------------------------------------------------------------------------
+    /*static final int REQUEST_VIDEO_CAPTURE = 1;
+    public void TomarVideo(View view) { //se debe estar en publico y NO olvidar agregar el parametro View
+        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+        }
+    }*/
+
+    //METODOS CAMARA--------------------------------------------------------------------------------
+    //METODO PARA CREAR UN NOMBRE UNICO A CADA FOTO-------------------------------------------------
+    /*String mCurrentPhotoPath;
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "Backup_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+    //METODO PARA TOMAR LA FOTO Y CREAR EL ARCHIVO--------------------------------------------------
+    static final int REQUEST_TAKE_PHOTO = 1;
+    public void tomarFoto(View view) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+    //METODO PARA MOSTRAR LA VISTA PREVIA EN UN IMAGEVIEW DE LA FOTO TOMADA-------------------------
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            img.setImageBitmap(imageBitmap);
+        }
+    }*/
+
+
+    //METODOS BOTONES DE ACCION---------------------------------------------------------------------
+    //METODO PARA MOSTRAR LOS BOTONES DE ACCION-----------------------------------------------------
+    /*public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menuacciones,menu);
+        return true;
+    }
+    //METODO PARA AGREGAR ACCIONES A LOS BOTONES----------------------------------------------------
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        if(id == R.id.compartir){
+            Toast.makeText(this,"Compartir",Toast.LENGTH_SHORT).show();
+            return true;
+        }else if(id == R.id.buscar){
+            Toast.makeText(this,"Buscar",Toast.LENGTH_SHORT).show();
+            return true;
+        }else if(id == R.id.opcion1){
+            Toast.makeText(this,"Opcion 1",Toast.LENGTH_SHORT).show();
+            return true;
+        }else if(id == R.id.opcion2){
+            Toast.makeText(this,"Opcion 2",Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }*/
+
+    //METODOS MENU OVERFLOW-------------------------------------------------------------------------
+    //METODO PARA MOSTAR Y OCULTAR EL MENÚ----------------------------------------------------------
+    /*public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.overflow,menu);
+        return true;
+    }
+    //METODO PARA ASIGNAR FUNCIONES A LAS OPCIONES--------------------------------------------------
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId(); //se recupera el item que se selecciono
+        if(id==R.id.item1){
+            Toast.makeText(this,"Opción 1",Toast.LENGTH_SHORT).show();
+        }else if(id==R.id.item2){
+            Toast.makeText(this,"Opción 2",Toast.LENGTH_SHORT).show();
+        }else if(id==R.id.item3){
+            Toast.makeText(this,"Opción 3",Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }*/
+
+    //METODOS GRABADORA-----------------------------------------------------------------------------
+    //METODO PARA GRABAR
+    /*public void Recorder(View view){
+        if(grabacion == null){
+            archivoSalida = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Grabacion.mp3";
+            grabacion = new MediaRecorder();
+            grabacion.setAudioSource(MediaRecorder.AudioSource.MIC);
+            grabacion.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            grabacion.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+            grabacion.setOutputFile(archivoSalida);
+
+            try{
+                grabacion.prepare();
+                grabacion.start();
+            }catch (IOException e){
+            }
+
+            btn_recorder.setBackgroundResource(R.drawable.rec);
+            Toast.makeText(getApplicationContext(),"Grabando",Toast.LENGTH_SHORT).show();
+        } else if(grabacion != null){
+            grabacion.stop();
+            grabacion.release();//estado finalizado
+            grabacion = null;
+            btn_recorder.setBackgroundResource(R.drawable.stop_rec);
+            Toast.makeText(getApplicationContext(),"Grabación finalizada",Toast.LENGTH_SHORT).show();
+        }
+    }
+    //METODO PARA REPRODUCIR
+    public void Reproducir(View view){
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        try{
+            mediaPlayer.setDataSource(archivoSalida);
+            mediaPlayer.prepare();
+        }catch (IOException e){
+
+        }
+        mediaPlayer.start();
+        Toast.makeText(getApplicationContext(),"Reproduciendo audio", Toast.LENGTH_SHORT).show();
+    }*/
+
+    //METODOS REPRODUCTOR---------------------------------------------------------------------------
+    //METODO PARA EL BOTON PLAY/PAUSE
+    /*public void PlayPause(View view){
+        if(vectormp[posicion].isPlaying()){
+            vectormp[posicion].pause();
+            play_pausa.setBackgroundResource(R.drawable.reproducir);
+            Toast.makeText(this,"Pausa",Toast.LENGTH_SHORT).show();
+        }else {
+            vectormp[posicion].start();
+            play_pausa.setBackgroundResource(R.drawable.pausa);
+            Toast.makeText(this,"Play",Toast.LENGTH_SHORT).show();
+        }
+    }
+    //METODO PARA EL BOTON STOP
+    public void Stop(View view){
+        if (vectormp[posicion] != null){
+            vectormp[posicion].stop();
+
+            vectormp[0] = MediaPlayer.create(this, R.raw.race);
+            vectormp[1] = MediaPlayer.create(this, R.raw.sound);
+            vectormp[2] = MediaPlayer.create(this, R.raw.tea);
+            posicion = 0;
+            play_pausa.setBackgroundResource(R.drawable.reproducir);
+            iv.setImageResource(R.drawable.portada1);
+            Toast.makeText(this,"Stop",Toast.LENGTH_SHORT).show();
+        }
+    }
+    //METODO PARA EL BOTON REPETIR
+    public void Repetir(View view){
+        if (repetir == 1){
+            btn_repetir.setBackgroundResource(R.drawable.no_repetir);
+            Toast.makeText(this,"No repetir",Toast.LENGTH_SHORT).show();
+            vectormp[posicion].setLooping(false);
+            repetir = 2;
+        }else {
+            btn_repetir.setBackgroundResource(R.drawable.repetir);
+            Toast.makeText(this,"Repetir",Toast.LENGTH_SHORT).show();
+            vectormp[posicion].setLooping(true);
+            repetir = 1;
+        }
+    }
+    //METODO PARA EL BOTON SIGUIENTE
+    public void Siguiente(View view){
+        if(posicion < vectormp.length -1){
+            if(vectormp[posicion].isPlaying()){
+                vectormp[posicion].stop();
+                posicion++;
+                vectormp[posicion].start();
+
+                if(posicion == 0){
+                    iv.setImageResource(R.drawable.portada1);
+                }else if(posicion == 1){
+                    iv.setImageResource(R.drawable.portada2);
+                }else if(posicion == 2){
+                    iv.setImageResource(R.drawable.portada3);
+                }
+            }else{
+                posicion++;
+
+                if(posicion == 0){
+                    iv.setImageResource(R.drawable.portada1);
+                }else if(posicion == 1){
+                    iv.setImageResource(R.drawable.portada2);
+                }else if(posicion == 2){
+                    iv.setImageResource(R.drawable.portada3);
+                }
+            }
+        }else {
+            Toast.makeText(this,"No hay más canciones",Toast.LENGTH_SHORT).show();
+        }
+    }
+    //METODO PARA EL BOTON ANTERIOR
+    public void Anterior(View view){
+        if(posicion >= 1){
+            if(vectormp[posicion].isPlaying()){
+                vectormp[posicion].stop();
+                //para no perder las canciones
+                vectormp[0] = MediaPlayer.create(this, R.raw.race);
+                vectormp[1] = MediaPlayer.create(this, R.raw.sound);
+                vectormp[2] = MediaPlayer.create(this, R.raw.tea);
+                posicion--;
+
+                if(posicion == 0){
+                    iv.setImageResource(R.drawable.portada1);
+                }else if(posicion == 1){
+                    iv.setImageResource(R.drawable.portada2);
+                }else if(posicion == 2){
+                    iv.setImageResource(R.drawable.portada3);
+                }
+                vectormp[posicion].start();
+            }else{
+                posicion--;
+
+                if(posicion == 0){
+                    iv.setImageResource(R.drawable.portada1);
+                }else if(posicion == 1){
+                    iv.setImageResource(R.drawable.portada2);
+                }else if(posicion == 2){
+                    iv.setImageResource(R.drawable.portada3);
+                }
+            }
+        }else {
+            Toast.makeText(this,"No hay más canciones",Toast.LENGTH_SHORT).show();
+        }
+    }*/
+
+    //METODO AUDIO CON SOUNDPOOL--------------------------------------------------------------------
+    /*public void AudioSoundPool(View view){
+        sp.play(sonido_de_Reproduccion, 1,1,1,0, 0);
+    }*/
+    //METODO AUDIO CON MEDIAPLAYER------------------------------------------------------------------
+    /*public  void  MediaPlayer(View view){
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.sound_long);
+        mp.start();
+    }*/
+
+    //METODO SELECCION FRUTAS SCROLLVIEW------------------------------------------------------------
+    /*public void Seleccion(View view){
+        switch (view.getId()){
+            case R.id.fresas:
+                Toast.makeText(this,"Estas son fresas", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.uvas:
+                Toast.makeText(this,"Estas son uvas", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.bananas:
+                Toast.makeText(this,"Estas son bananas", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.cerezas:
+                Toast.makeText(this,"Estas son cerezas", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.frambuesas:
+                Toast.makeText(this,"Estas son frambuesas", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.kiwis:
+                Toast.makeText(this,"Estos son kiwis", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.mangos:
+                Toast.makeText(this,"Estos son mangos", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.manzanas:
+                Toast.makeText(this,"Estas son manzanas", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.melon:
+                Toast.makeText(this,"Este es un melon", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.naranjas:
+                Toast.makeText(this,"Estas son naranjas", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.peras:
+                Toast.makeText(this,"Estas son peras", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.pina:
+                Toast.makeText(this,"Esta es uns piña", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.sandia:
+                Toast.makeText(this,"Esta es una sandia", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.zarzamoras:
+                Toast.makeText(this,"Estas son zarzamoras", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }*/
+
+    //METODO REGISTRAR OCULTAR FRAMELAYOUT----------------------------------------------------------
+    /*public void Ocultar(View view){
+        boton1.setVisibility(View.INVISIBLE);
+        iv1.setVisibility(View.VISIBLE);
+    }*/
+
+    //METODO REGISTRAR PRODUCTOS SQLITE-------------------------------------------------------------
+    /*public void  Registrar (View view){
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,"administracion", null, 1);
         SQLiteDatabase BaseDeDatos = admin.getWritableDatabase();
 
@@ -68,9 +435,9 @@ public class MainActivity extends AppCompatActivity {
         }else{
             Toast.makeText(this, "Debes llenar todos los campos", Toast.LENGTH_SHORT).show();;
         }
-    }
-    //METODO CONSULTAR PRODUCTOS SQLITE--------------------------------------------------------------
-    public  void  Buscar(View view){
+    }*/
+    //METODO CONSULTAR PRODUCTOS SQLITE-------------------------------------------------------------
+    /*public  void  Buscar(View view){
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "administracion",null,1);
         SQLiteDatabase BaseDeDatos = admin.getWritableDatabase();
 
@@ -89,9 +456,9 @@ public class MainActivity extends AppCompatActivity {
         }else {
             Toast.makeText(this, "Debes introducir el código del artículo", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
     //METODO ELIMINAR PRODUCTOS SQLITE--------------------------------------------------------------
-    public void Eliminar(View view){
+    /*public void Eliminar(View view){
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "administracion",null,1);
         SQLiteDatabase BaseDeDatos = admin.getWritableDatabase();
 
@@ -113,9 +480,9 @@ public class MainActivity extends AppCompatActivity {
         }else {
             Toast.makeText(this,"Debes de introducir el código del artículo",Toast.LENGTH_SHORT).show();
         }
-    }
-    //METODO MODIFICAR PRODUCTOS SQLITE--------------------------------------------------------------
-    public void  Modificar(View view){
+    }*/
+    //METODO MODIFICAR PRODUCTOS SQLITE-------------------------------------------------------------
+    /*public void  Modificar(View view){
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,"administracion",null,1);
         SQLiteDatabase BaseDeDatos = admin.getWritableDatabase();
 
@@ -140,7 +507,7 @@ public class MainActivity extends AppCompatActivity {
         }else {
             Toast.makeText(this,"Debes llenar todos los campos", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
     //METODO GUARDAR ARCHIVOS EXTERNOS--------------------------------------------------------------
     /*public void Guardar(View view) {
@@ -279,10 +646,10 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
     //METODO BOTON SIGUIENTE------------------------------------------------------------------------
-    public void Siguiente(View view){
+    /*public void Siguiente(View view){
         Intent siguiente = new Intent(this, SegundoActivity.class);
         startActivity(siguiente);
-    }
+    }*/
 
     //METODO REGISTRAR------------------------------------------------------------------------------
     /*public void Registrar(View view){
@@ -299,13 +666,13 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
     //METODO PARA EL IMAGEBUTTON G------------------------------------------------------------------
-    public void MensajeG(View view){
+    /*public void MensajeG(View view){
         Toast.makeText(this,"Imagen Geekipedia", Toast.LENGTH_SHORT).show();
     }
     //METODO PARA EL IMAGEBUTTON MANO---------------------------------------------------------------
     public void MensajeMano(View view){
         Toast.makeText(this,"Imagen de una mano", Toast.LENGTH_SHORT).show();
-    }
+    }*=
     //----------------------------------------------------------------------------------- onCreate()
         /*tv1 = (TextView)findViewById(R.id.tv1);
         lv1 = (ListView)findViewById(R.id.lv1);

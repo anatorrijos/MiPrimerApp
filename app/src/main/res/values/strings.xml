@@ -1,17 +1,41 @@
 <resources>
-    <string name="app_name">MiPrimerApp</string>
+    <string name="app_name">Curso Android: FrutiApp</string>
+    <string name="et_nombre">¿Cómo te llamas?</string>
+    <string name="boton">Jugar</string>
+
+
+    <!-- ACTIVITY 2 -->
+    <!-- <string name="BotonCerrar">Cerrar</string> -->
+
+
+    <!-- menuacciones -->
+    <string name="Buscar">Buscar</string>
+    <string name="Compartir">Compartir</string>
+    <string name="Opcion1">Opcion 1</string>
+    <string name="Opcion2">Opcion 2</string>
+
+    <!-- overflow -->
+    <string name="item1">Opción 1</string>
+    <string name="item2">Opción 2</string>
+    <string name="item3">Opción 3</string>
+
+    <!-- <string name="Button">Iniciar Sesión</string>
+    <string name="et_usuario">Usuario</string>
+    <string name="et_password">Contraseña</string>
+    <string name="textview">Todos los derechos reservados</string> -->
+    <!--
+    <string name="SoundPool">Audio con SoundPool</string>
+    <string name="MediaPlayer">Audio con MediaPlayer</string>
+
     <string name="txt_codigo">Código del producto</string>
     <string name="txt_descripcion">Descripción del producto</string>
     <string name="txt_precio">Precio del producto</string>
     <string name="botonRegistrar">Registrar producto</string>
     <string name="botonBuscar">Buscar producto</string>
     <string name="botonEliminar">Eliminar producto</string>
-    <string name="botonModificar">Modificar Producto</string>
+    <string name="botonModificar">Modificar Producto</string> -->
 
-    <!-- ACTIVITY 2 -->
-    <string name="BotonCerrar">Cerrar</string>
-
-    <!-- <string name="txt_nombre">Nombre</string>
+    <!-- <string name="txt_nombre">Nombre</string>v
     <string name="txt_password">Password</string>
     <string name="button">Registrar</string> -->
     <!--
@@ -23,7 +47,6 @@
     <string name="rb2">Restar</string>
     <string name="rb3">Multiplicar</string>
     <string name="rb4">División</string> -->
-
     <!-- ADVERTENCIA HARDCODED TEST
     <string name="txt_view_String">Estatus del Maestro</string>
     <string name="txt_matematicas_String">Matemáticas</string>
